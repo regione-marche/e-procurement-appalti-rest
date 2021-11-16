@@ -1,0 +1,72 @@
+# This repository adheres to the publiccode.yml standard by including this 
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+applicationSuite: e-procurement GT-SUAM
+categories:
+  - procurement
+dependsOn:
+  open:
+    - name: Java
+      optional: false
+      version: OpenJDK-11.0.12
+      versionMax: '11'
+      versionMin: '1.8'
+    - name: Postgresql
+      optional: false
+      version: ''
+      versionMax: '11'
+      versionMin: '9.6'
+description:
+  it:
+    features:
+      - Dati di pubblicazione di bandi di gara in corso e scaduti
+      - Dati di pubblicazione di esiti in corso e scaduti
+      - Dati di pubblicazione di dati di contratto
+      - Dati di pubblicazione dei dati Legge 190/2012
+      - Dati di pubblicazione degli avvisi
+    genericName: e-procurement platform
+    longDescription: |
+      Servizio (API) di pubblicazione dei dati di avvisi, bandi esiti e atti, riepilogo contratti e dati degli adempimenti di cui alla Legge 190/2012.
+      Il servizio mette a disposizione i dati ad accesso pubblico così come visibili dal PortaleAppalti della piattaforme di e-procurement.
+      I dati inerenti i contratti sono altresì accessibili con accesso riservato anche prima della pubblicazione della pubblicazione dell'esito.
+      Le specifiche del servizio sono disponibili mediante interfaccia OpenAPI (swagger-ui.html) direttamente interrogando la base url del servizio deployato.
+    shortDescription: API per la pubblicazione dei dati avvisi, bandi esiti, atti e contratti
+usedBy:
+  - Regione Marche
+developmentStatus: stable
+it:
+  conforme:
+    gdpr: false
+    lineeGuidaDesign: false
+    misureMinimeSicurezza: false
+    modelloInteroperabilita: false
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: false
+  riuso:
+    codiceIPA: r_marche
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Maggioli S.p.A.
+  repoOwner: Regione Marche
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: false
+maintenance:
+  contractors:
+    - name: MAGGIOLI SPA
+      until: '2021-12-31'
+      website: 'https://www.maggioli.com'
+  type: contract
+name: appalti-rest
+platforms:
+  - web
+releaseDate: '2021-10-15'
+softwareType: standalone/backend
+url: 'https://github.com/regione-marche/e-procurement-appalti-rest.git'
