@@ -128,7 +128,7 @@ public class DatiGeneraliDto {
     this.attiDocumenti = attiDocumenti;
   }
 
-  @ApiModelProperty(name = "dataUltimaModifica",accessMode = AccessMode.READ_ONLY,notes="Data ultima modifica")
+  @ApiModelProperty(name = "dataUltimaModifica",accessMode = AccessMode.READ_ONLY,notes="Data ultima modifica", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDataUltimaModifica() {
     return dataUltimaModifica;

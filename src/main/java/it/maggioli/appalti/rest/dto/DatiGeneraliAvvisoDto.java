@@ -38,7 +38,7 @@ public class DatiGeneraliAvvisoDto extends DatiGeneraliDto {
 //    this.dataUltimaModifica = dataUltimaModifica;
 //  }
 
-  @ApiModelProperty(name = "dataUltimaModifica",value = "Data di ultima modifica della comunicazione")
+  @ApiModelProperty(name = "dataUltimaModifica",value = "Data di ultima modifica della comunicazione", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @Override
   public Date getDataUltimaModifica() {

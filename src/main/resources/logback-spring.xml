@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<property name="LOG_PATH" value="${catalina.base}/logs" />
-	<property name="LOG_NAME" value="ws-appalti-rest" />
+	<springProperty scope="context" name="localName" source="catalina.base" defaultValue="/opt/api-appalti"/>
+	<property name="LOG_NAME" value="ws-appalti-ms" />
 	<appender name="STDOUT"	class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>
@@ -9,9 +9,9 @@
 			</pattern>
 		</encoder>
 	</appender>
-
+	
 	<appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/${LOG_NAME}.log</file>
+		<file>${localName:-/opt/api-appalti}/logs/${LOG_NAME}.log</file>
 		<encoder
 			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>
@@ -20,7 +20,7 @@
 		</encoder>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/${LOG_NAME}_%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<fileNamePattern>${localName:-/opt/api-appalti}/logs/${LOG_NAME}_%d{yyyy-MM-dd}.gz</fileNamePattern>
 			
 		</rollingPolicy>
 	</appender>
@@ -29,7 +29,7 @@
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SAVE-TO-FILE" />
 	</root>
-
+	
 	<logger name="it.maggioli" additivity="false" level="debug">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="SAVE-TO-FILE" />

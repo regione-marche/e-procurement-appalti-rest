@@ -35,5 +35,10 @@ public class Torn {
   public void setCodgar(String codgar) {
     this.codgar = codgar;
   }
+
+  @Override
+  public String toString() {
+    return "Torn [" + (codgar != null ? "codgar=" + codgar + ", " : "") + (cenint != null ? "cenint=" + cenint : "") + "]";
+  }
   
 }

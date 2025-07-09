@@ -39,7 +39,7 @@ public class ComunicazioneDto {
     this.testo = testo;
   }
   
-  @ApiModelProperty(name = "dataPubblicazione",value = "data di pubblicazione della comunicazione")
+  @ApiModelProperty(name = "dataPubblicazione",value = "data di pubblicazione della comunicazione", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDataPubblicazione() {
     return dataPubblicazione;

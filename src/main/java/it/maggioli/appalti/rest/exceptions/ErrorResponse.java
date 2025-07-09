@@ -5,7 +5,7 @@ import java.util.List;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(description = "This represent the default error message.")
+@ApiModel(value = "ErrorResponse", description = "This represent the default error message.")
 public class ErrorResponse {
     public ErrorResponse(String message, final List<String> details) {
         this.message = message;

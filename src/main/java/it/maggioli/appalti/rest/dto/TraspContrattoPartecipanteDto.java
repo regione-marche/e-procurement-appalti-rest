@@ -2,8 +2,9 @@ package it.maggioli.appalti.rest.dto;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.annotations.ApiModelProperty;
 
 public class TraspContrattoPartecipanteDto {
   private String codice;
@@ -11,12 +12,12 @@ public class TraspContrattoPartecipanteDto {
   private String ragsoc;
   private String codfisc;
   private String partiva;
+  private boolean italiana;
   private Boolean rti;
   private Boolean mandataria;
   
   private List<TraspContrattoPartecipanteDto> listaRti;
   
-  @JsonIgnore
   public String getCodice() {
     return codice;
   }
@@ -25,7 +26,6 @@ public class TraspContrattoPartecipanteDto {
     this.codice = codice;
   }
   
-  @JsonIgnore
   public String getDitta() {
     return ditta;
   }
@@ -79,6 +79,7 @@ public class TraspContrattoPartecipanteDto {
     this.mandataria = mandataria;
   }
 
+  @ApiModelProperty(reference ="TraspContrattoPartecipanteDto" ,name = "componentiRTI",dataType = "List")
   @JsonProperty("componentiRti")
   public List<TraspContrattoPartecipanteDto> getListaRti() {
     return listaRti;
@@ -86,6 +87,20 @@ public class TraspContrattoPartecipanteDto {
 
   public void setListaRti(List<TraspContrattoPartecipanteDto> listaRti) {
     this.listaRti = listaRti;
+  }
+
+  /**
+   * @return the italiana
+   */
+  public boolean getItaliana() {
+    return italiana;
+  }
+
+  /**
+   * @param italiana the italiana to set
+   */
+  public void setItaliana(boolean italiana) {
+    this.italiana = italiana;
   }
 
   @Override

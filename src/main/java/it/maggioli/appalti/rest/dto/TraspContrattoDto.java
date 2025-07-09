@@ -6,6 +6,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Data Transfer Object per {@link it.maggioli.appalti.rest.entities.views.ws.TraspContratto TraspContratto}
  * @author gabriele.nencini
@@ -97,8 +99,9 @@ public class TraspContrattoDto {
     this.impsommeliq = impsommeliq;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty(value = "datapubblicazioneesito")
-  @JsonFormat(pattern="dd-MM-yyyy",timezone = EUROPE_TIMEZONE)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatapubbesito() {
     return datapubbesito;
   }
@@ -107,18 +110,22 @@ public class TraspContrattoDto {
     this.datapubbesito = datapubbesito;
   }
 
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatainizio() {
     return datainizio;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty(value = "datainizio")
-  @JsonFormat(pattern="dd-MM-yyyy",timezone = EUROPE_TIMEZONE)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public void setDatainizio(Date datainizio) {
     this.datainizio = datainizio;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty(value = "datafine")
-  @JsonFormat(pattern="dd-MM-yyyy",timezone = EUROPE_TIMEZONE)
+  @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatafine() {
     return datafine;
   }

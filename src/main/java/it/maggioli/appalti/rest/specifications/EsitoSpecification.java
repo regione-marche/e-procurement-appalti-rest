@@ -95,7 +95,7 @@ public class EsitoSpecification {
           p.getExpressions().add(p2);
         }
         if(StringUtils.hasText(cig)) {
-          p.getExpressions().add(cb.like(cb.upper(root.get("cig")), "%" +cig.toUpperCase()+"%"));
+          p.getExpressions().add(cb.like(cb.upper(root.get("codcig")), "%" +cig.toUpperCase()+"%"));
         }
         if(StringUtils.hasText(oggetto)) {
           p.getExpressions().add(cb.like(cb.upper(root.get("oggetto")), "%"+oggetto.toUpperCase()+"%"));

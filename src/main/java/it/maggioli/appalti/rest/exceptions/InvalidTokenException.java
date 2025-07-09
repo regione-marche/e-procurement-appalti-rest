@@ -10,7 +10,7 @@ public class InvalidTokenException extends Exception {
 
   @Override
   public String getMessage() {
-    return "Token invalid or expired.";
+    return "Token invalido o scaduto.";
   }
 
 }

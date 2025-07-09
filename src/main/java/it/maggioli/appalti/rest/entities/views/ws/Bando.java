@@ -42,6 +42,8 @@ public class Bando  implements Serializable {
   protected String tipoAppalto;
   @Column(name = "desctipogar")
   protected String tipoProcedura;
+  @Column(name = "codtipoapp")
+  protected String idTipoAppalto;
   @Column(name = "desccriagg")
   protected String tipoAggiudicazione;
   @Column(name = "codmodagg")
@@ -530,5 +532,13 @@ public class Bando  implements Serializable {
   
   public void setAltriSoggetti(Integer altriSoggetti) {
     this.altriSoggetti = altriSoggetti;
+  }
+
+  public String getIdTipoAppalto() {
+    return idTipoAppalto;
+  }
+
+  public void setIdTipoAppalto(String idTipoAppalto) {
+    this.idTipoAppalto = idTipoAppalto;
   }
 }

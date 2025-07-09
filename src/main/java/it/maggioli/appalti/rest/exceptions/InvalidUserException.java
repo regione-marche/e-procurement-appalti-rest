@@ -10,7 +10,7 @@ public class InvalidUserException extends Exception {
 
   @Override
   public String getMessage() {
-    return "Username or password invalid.";
+    return "Username o password invalidi.";
   }
 
 }

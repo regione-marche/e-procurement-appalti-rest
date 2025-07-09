@@ -2,6 +2,8 @@ package it.maggioli.appalti.rest.manager;
 
 import static it.maggioli.appalti.rest.specifications.BandoSpecification.getBandoDocumentoLottoSpecification;
 import static it.maggioli.appalti.rest.specifications.EsitoSpecification.getEsitoSpecification;
+import static it.maggioli.appalti.rest.utils.Transform.transform;
+import static it.maggioli.appalti.rest.utils.Transform.transformCheckNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ import it.maggioli.appalti.rest.repositories.views.ws.GareNAggiudicatariReposito
  *
  */
 @Service
+@SuppressWarnings("java:S3749")
 public class EsitoManager {
   private static final Logger logger = LoggerFactory.getLogger(EsitoManager.class);
   private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -87,39 +90,53 @@ public class EsitoManager {
       final Integer numAnniPubblicazione,int page, int pageSize,
       final Date dataUltimaModificaDA,
       final Date dataUltimaModificaA){
-    PageRequest pageRequest = PageRequest.of(page>0?page-1:0, pageSize);
+    PageRequest pageRequest = PageRequest.of(page > 0 ? page - 1 : 0, pageSize);
     
     GregorianCalendar dataMinimaPubblicazione = new GregorianCalendar();
     Integer annoMinimoPubblicazione = dataMinimaPubblicazione.get(Calendar.YEAR) - numAnniPubblicazione ;
     
-    Page<Esito> pageEsito = esitoRepository.findAll(getEsitoSpecification(stazioneAppaltante,oggetto,cig,tipoAppalto,dataPubblicazioneDa,dataPubblicazioneA,proceduraTelematica,altriSoggetti,sommaUrgenza,annoMinimoPubblicazione,dataUltimaModificaDA,dataUltimaModificaA), pageRequest);
+    Page<Esito> pageEsito = esitoRepository.findAll(
+            getEsitoSpecification(
+                    stazioneAppaltante
+                    , oggetto
+                    , cig
+                    , tipoAppalto
+                    , dataPubblicazioneDa
+                    , dataPubblicazioneA
+                    , proceduraTelematica
+                    , altriSoggetti
+                    , sommaUrgenza
+                    , annoMinimoPubblicazione
+                    , dataUltimaModificaDA
+                    , dataUltimaModificaA
+            ), pageRequest);
     
-    PageDto<EsitoTestataDto> pageDto = new PageDto<EsitoTestataDto>();
+    PageDto<EsitoTestataDto> pageDto = new PageDto<>();
     BeanUtils.copyProperties(pageEsito, pageDto,"content");
-    pageDto.setContent(pageEsito.getContent().stream().map(functionEsitoToTestata::apply).collect(Collectors.toList()));
+    pageDto.setContent(transform(pageEsito.getContent(), functionEsitoToTestata));
+
     return Optional.ofNullable(pageDto);
   }
   
   public void getEsitoLotto(String codiceGara) {
     List<IEsitoLottoDto> list = esitoRepository.findViewIEsitoLottoDto(codiceGara);
     logger.info("list is {}",list);
-    if(list!=null) {
+    if (list!=null)
       logger.info("list size {}",list.size());      
-    }
   }
   
   @Transactional(readOnly = true)
-  public Optional<DettaglioDto<DatiGeneraliDto, BandoDocumentoDto, Void>> getDettaglioEsito(String codiceDiRiferimento) {
+  public Optional<DettaglioDto<DatiGeneraliDto, BandoDocumentoDto, Object>> getDettaglioEsito(String codiceDiRiferimento) {
     //stazione appaltante
     long start = System.currentTimeMillis();
     Optional<Esito> opesito  = esitoRepository.findById(codiceDiRiferimento);
     
-    if(opesito.isPresent()) {
+    if (opesito.isPresent()) {
       
-      DettaglioDto<DatiGeneraliDto, BandoDocumentoDto, Void> dettaglioEsito = new DettaglioDto<DatiGeneraliDto, BandoDocumentoDto, Void>();
+      DettaglioDto<DatiGeneraliDto, BandoDocumentoDto, Object> dettaglioEsito = new DettaglioDto<>();
       
       Esito es = opesito.get();
-      if(es.getGarpriv()!=null) return Optional.empty(); //TODO +integrazione gare privatistiche (req:PORTAPPALT-130)
+      if (es.getGarpriv() != null) return Optional.empty(); //TODO +integrazione gare privatistiche (req:PORTAPPALT-130)
       
       StazioneAppaltanteDto sa = new StazioneAppaltanteDto();
       sa.setRup(es.getDescrup());
@@ -141,28 +158,32 @@ public class EsitoManager {
       ConfigurationResponse resp = confManager.getProperty(ConfigurationManager.GARE_ADERENTI_VIS);
       boolean filterSoggettAderentiVisible = Boolean.valueOf(resp.getValore());
       logger.debug("Filtro soggetti aderenti a {}",filterSoggettAderentiVisible);
-      if(filterSoggettAderentiVisible) {
+      if (filterSoggettAderentiVisible) {
         logger.debug("Filtro soggetti aderenti a true");
         List<AderenteLotto> aderenteLottoList = adlRepository.getSoggettiAderenti(codiceDiRiferimento);
-        if(aderenteLottoList!=null && aderenteLottoList.size()>0) {
-          dettaglioEsito.setSoggettiAderenti(aderenteLottoList.stream().filter(Objects::isNull).map(functionToSoggettoAderenteDto::apply).collect(Collectors.toList()));
-        }
+        if (aderenteLottoList != null && aderenteLottoList.size() > 0)
+          dettaglioEsito.setSoggettiAderenti(transformCheckNull(aderenteLottoList, functionToSoggettoAderenteDto));
       }
       
-      List<IEsitoLottoDto> list = esitoRepository.findViewIEsitoLottoDto(es.getCodice());
+      List<IEsitoLottoDto> esitiLotto = esitoRepository.findViewIEsitoLottoDto(es.getCodice());
       
       List<String> codiciPerAggiudicatari = null;
       List<EsitoLottoDto> listaEsitoLotto = null;
-      if(!list.isEmpty()) {
-        codiciPerAggiudicatari = new ArrayList<String>(list.size());
-        if(list.size()>1) {//ottimizzazione
-          listaEsitoLotto = list.stream().map(functionToEsitoLottoDto::apply).collect(Collectors.toList());
+      if (!esitiLotto.isEmpty()) {
+        codiciPerAggiudicatari = new ArrayList<>(esitiLotto.size());
+        if (esitiLotto.size() > 1) { //ottimizzazione
+          listaEsitoLotto = transform(esitiLotto, functionToEsitoLottoDto);
           dg.setDatiProceduralotti(listaEsitoLotto);
-          codiciPerAggiudicatari.addAll(list.parallelStream().filter(e->(e!=null && e.getNgara()!=null)).map(e->{return e.getNgara();}).collect(Collectors.toList()));
+          codiciPerAggiudicatari.addAll(
+                  esitiLotto.parallelStream()
+                    .filter(esito -> esito != null && esito.getNgara() != null)
+                    .map(IEsitoLottoDto::getNgara)
+                  .collect(Collectors.toList())
+          );
         } else {
-          listaEsitoLotto = Collections.singletonList(functionToEsitoLottoDto.apply(list.get(0)));
+          listaEsitoLotto = Collections.singletonList(functionToEsitoLottoDto.apply(esitiLotto.get(0)));
           dg.setDatiProceduralotti(listaEsitoLotto);
-          codiciPerAggiudicatari.add(list.get(0).getNgara());
+          codiciPerAggiudicatari.add(esitiLotto.get(0).getNgara());
         }
         
         logger.debug("codiciPerAggiudicatari: {}",codiciPerAggiudicatari);
@@ -174,14 +195,14 @@ public class EsitoManager {
       boolean filterAttiDocVisible = Boolean.valueOf(resp.getValore());
       logger.info("{} -> {}",resp,filterAttiDocVisible);
       
-      if(filterAttiDocVisible) {
+      if (filterAttiDocVisible) {
         List<BandoDocumento> documentiAttiEsiti = bdRepository.findAttiDocumentiBando(codiceDiRiferimento);
         
-        if(!documentiAttiEsiti.isEmpty()) {
-          if(documentiAttiEsiti.size()>1) {
-            dg.setAttiDocumenti(documentiAttiEsiti.stream().filter(Objects::nonNull).map(functionToBandoDocumentoDto::apply).collect(Collectors.toList()));
+        if (!documentiAttiEsiti.isEmpty()) {
+          if (documentiAttiEsiti.size() > 1) {
+            dg.setAttiDocumenti(transformCheckNull(documentiAttiEsiti, functionToBandoDocumentoDto));
           } else {
-            if(Objects.nonNull(documentiAttiEsiti.get(0))) {
+            if (Objects.nonNull(documentiAttiEsiti.get(0))) {
               dg.setAttiDocumenti(Collections.singletonList(functionToBandoDocumentoDto.apply(documentiAttiEsiti.get(0))));
             }
           }
@@ -190,32 +211,27 @@ public class EsitoManager {
       
       //documenti
       List<BandoDocumento> documentiEsiti = bdRepository.findAll(getBandoDocumentoLottoSpecification(es.getCodice(),null,Collections.singleton(4)));
-      if(!documentiEsiti.isEmpty()) {
-        if(documentiEsiti.size()>1) {
-          dettaglioEsito.setDocumentazione(documentiEsiti.stream().filter(Objects::nonNull).map(functionToBandoDocumentoDto::apply).collect(Collectors.toList()));
-        } else {
-          if(Objects.nonNull(documentiEsiti.get(0))) {
+      if (!documentiEsiti.isEmpty()) {
+        if (documentiEsiti.size() > 1)
+          dettaglioEsito.setDocumentazione(transformCheckNull(documentiEsiti, functionToBandoDocumentoDto));
+        else if (Objects.nonNull(documentiEsiti.get(0)))
           dettaglioEsito.setDocumentazione(Collections.singletonList(functionToBandoDocumentoDto.apply(documentiEsiti.get(0))));
-          }
-        }
       }
       
       //ricerco gli aggiudicatari
-      Optional<Boolean> opBool = esitoRepository.isAQAggiudicatariMultipli(codiceDiRiferimento);
-      if(opBool.isPresent()) {
-        final Map<String, List<String>> listAggByCodice = new HashMap<String, List<String>>();
-        if(opBool.get().booleanValue()) {
-          //aggiudicatari multipli
+      boolean opBool = esitoRepository.existsByCodiceAndIsaccordoquadroAndNaggiudicatari(codiceDiRiferimento, true, 1);
+      final Map<String, List<String>> listAggByCodice = new HashMap<>();
+      if (opBool) {
+        //aggiudicatari multipli
 //          List<GareNAggiudicatari> nAgg = gnaRepository.findByIdentityCodiceIn(codiciPerAggiudicatari);
-          listAggByCodice.putAll(gnaRepository.findByIdentityCodiceInOrderByIdentityCodiceAscNumordAsc(codiciPerAggiudicatari).collect(Collectors.groupingBy(p -> p.getIdentity().getCodice(), Collectors.mapping(GareNAggiudicatari::getRagsoc, Collectors.toList()))));
-        } else {
-          //aggiudicatari singoli
+        listAggByCodice.putAll(gnaRepository.findByIdentityCodiceInOrderByIdentityCodiceAscNumordAsc(codiciPerAggiudicatari).collect(Collectors.groupingBy(p -> p.getIdentity().getCodice(), Collectors.mapping(GareNAggiudicatari::getRagsoc, Collectors.toList()))));
+      } else {
+        //aggiudicatari singoli
 //          List<GareLotti> glList = glRepository.findAllByNgaraInAndAggiudicatariaNotNull(codiciPerAggiudicatari);
-          listAggByCodice.putAll(glRepository.findAllByNgaraInAndAggiudicatariaNotNull(codiciPerAggiudicatari).collect(Collectors.groupingBy(GareLotti::getNgara, Collectors.mapping(GareLotti::getAggiudicataria, Collectors.toList()))));
-        }
-        listaEsitoLotto.parallelStream().forEach(e->{e.setAggiudicatari(listAggByCodice.get(e.getCodiceGara()));});
+        listAggByCodice.putAll(glRepository.findAllByNgaraInAndAggiudicatariaNotNull(codiciPerAggiudicatari).collect(Collectors.groupingBy(GareLotti::getNgara, Collectors.mapping(GareLotti::getAggiudicataria, Collectors.toList()))));
       }
-      logger.info("Time spent in method: {}",(System.currentTimeMillis()-start));
+      listaEsitoLotto.parallelStream().forEach(e-> e.setAggiudicatari(listAggByCodice.get(e.getCodiceGara())));
+      logger.info("Time spent in method: {}", (System.currentTimeMillis() - start));
       return Optional.of(dettaglioEsito);
     }
     

@@ -124,8 +124,9 @@ public class GaraAntiCorruzioneDto {
     this.impaggiudic = impaggiudic;
   }
   
-  @ApiModelProperty(name = "dataInizio")
+  @ApiModelProperty(name = "dataInizio",example = "2020-05-11 00:00:00")
   @JsonProperty("dataInizio")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDatainizio() {
     return datainizio;
   }
@@ -134,8 +135,9 @@ public class GaraAntiCorruzioneDto {
     this.datainizio = datainizio;
   }
   
-  @ApiModelProperty(name = "dataUltimazione")
+  @ApiModelProperty(name = "dataUltimazione",example = "2020-05-11 00:00:00")
   @JsonProperty("dataUltimazione")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDataultimazione() {
     return dataultimazione;
   }
@@ -154,7 +156,7 @@ public class GaraAntiCorruzioneDto {
     this.impsommeliq = impsommeliq;
   }
   
-  @ApiModelProperty(name = "dataPubblicazione")
+  @ApiModelProperty(name = "dataPubblicazione", example = "2020-05-11 00:00:00")
   @JsonProperty("dataPubblicazione")
   @JsonFormat(timezone = "CET",pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDatapubbl() {

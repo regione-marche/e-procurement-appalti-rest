@@ -72,7 +72,7 @@ public class EsitoLottoDto extends GareLottiDto {
     this.importoAggiudicazione = importoAggiudicazione;
   }
   
-  @ApiModelProperty(value = "data di aggiudicazione del lotto")
+  @ApiModelProperty(value = "data di aggiudicazione del lotto", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDataAggiudicazione() {
     return dataAggiudicazione;

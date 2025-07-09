@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class TraspContrattoDettaglioDto extends TraspContrattoDto {
   private Date datapubbgara;
   private Date datainvito;
@@ -24,6 +26,7 @@ public class TraspContrattoDettaglioDto extends TraspContrattoDto {
   List<TraspContrattoPartecipanteDto> partecipanti;
   List<TraspContrattoPartecipanteDto> aggiudicatariDto;
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty("dataPubblicazioneGara")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatapubbgara() {
@@ -34,6 +37,7 @@ public class TraspContrattoDettaglioDto extends TraspContrattoDto {
     this.datapubbgara = datapubbgara;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty("dataInvito")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatainvito() {
@@ -44,6 +48,7 @@ public class TraspContrattoDettaglioDto extends TraspContrattoDto {
     this.datainvito = datainvito;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty("dataAggiudicazione")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDataaggiudicazione() {
@@ -53,6 +58,8 @@ public class TraspContrattoDettaglioDto extends TraspContrattoDto {
   public void setDataaggiudicazione(Date dataaggiudicazione) {
     this.dataaggiudicazione = dataaggiudicazione;
   }
+  
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
   @JsonProperty("dataPubblicazioneEsito")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDatapubbesito() {

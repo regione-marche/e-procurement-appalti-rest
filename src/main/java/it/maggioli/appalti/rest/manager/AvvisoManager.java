@@ -2,6 +2,8 @@ package it.maggioli.appalti.rest.manager;
 
 import static it.maggioli.appalti.rest.specifications.AvvisoSpecification.getAvvisoSpecification;
 import static it.maggioli.appalti.rest.specifications.BandoSpecification.getBandoDocumentoLottoSpecification;
+import static it.maggioli.appalti.rest.utils.Transform.transform;
+import static it.maggioli.appalti.rest.utils.Transform.transformCheckNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import it.maggioli.appalti.rest.entities.views.ws.BandoDocumento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -50,6 +53,7 @@ import it.maggioli.appalti.rest.specifications.BandoSpecification;
  *
  */
 @Service
+@SuppressWarnings("java:S3749")
 public class AvvisoManager {
   private static final Logger logger = LoggerFactory.getLogger(AvvisoManager.class);
   private SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -85,24 +89,26 @@ public class AvvisoManager {
     GregorianCalendar dataMinimaPubblicazione = new GregorianCalendar();
     Integer annoMinimoPubblicazione = dataMinimaPubblicazione.get(Calendar.YEAR) - numAnniPubblicazione ;
     
-    PageRequest pageRequest = PageRequest.of(page>0?page-1:0, pageSize);
-    Page<Avviso> pagedAvv = avRepository.findAll(getAvvisoSpecification(stazioneAppaltante,
-      oggetto,
-      tipoAvviso,
-      dataPubblicazioneDa,
-      dataPubblicazioneA,
-      dataScadenzaDa,
-      dataScadenzaA,
-      altriSoggetti,
-      statoInCorsoScaduto,
-      annoMinimoPubblicazione,
-      dataUltimaModificaDA,
-      dataUltimaModificaA), pageRequest );
+    PageRequest pageRequest = PageRequest.of(page > 0 ? page - 1 : 0, pageSize);
+    Page<Avviso> pagedAvv = avRepository.findAll(
+            getAvvisoSpecification(stazioneAppaltante,
+              oggetto,
+              tipoAvviso,
+              dataPubblicazioneDa,
+              dataPubblicazioneA,
+              dataScadenzaDa,
+              dataScadenzaA,
+              altriSoggetti,
+              statoInCorsoScaduto,
+              annoMinimoPubblicazione,
+              dataUltimaModificaDA,
+              dataUltimaModificaA
+            ), pageRequest);
     
     PageDto<AvvisoTestataDto> pageDto = new PageDto<AvvisoTestataDto>();
     BeanUtils.copyProperties(pagedAvv, pageDto);
-    pageDto.setContent(pagedAvv.getContent().stream().map(functionToTestata::apply).collect(Collectors.toList()));
-    logger.info("Total time spent in method: {}",(System.currentTimeMillis()-start));
+    pageDto.setContent(transform(pagedAvv.getContent(), functionToTestata));
+    logger.info("Total time spent in method: {}", (System.currentTimeMillis() - start));
     return Optional.of(pageDto);
   }
   
@@ -139,19 +145,19 @@ public class AvvisoManager {
         logger.debug("Filtro soggetti aderenti a true");
         List<AderenteLotto> aderenteLottoList = adlRepository.getSoggettiAderenti(proceduraRiferimento);
         if(aderenteLottoList!=null && aderenteLottoList.size()>0) {
-          dettaglio.setSoggettiAderenti(aderenteLottoList.stream().filter(Objects::isNull).map(functionToSoggettoAderenteDto::apply).collect(Collectors.toList()));
+          dettaglio.setSoggettiAderenti(transformCheckNull(aderenteLottoList, functionToSoggettoAderenteDto));
         }
       }
       // i documenti di un avviso hanno codice gara = codice lotto e sono
       // sull'avviso perche' i lotti non esistono
-      dettaglio.setDocumentazione(bdlRepository.findAll(getBandoDocumentoLottoSpecification(av.getCodice(),av.getCodice(),Collections.singleton(1)))
-                                                        .stream().filter(Objects::nonNull).map(functionToBandoDocumentoDto::apply).collect(Collectors.toList()));
+      List<BandoDocumento> documenti = bdlRepository.findAll(getBandoDocumentoLottoSpecification(av.getCodice(), av.getCodice(), Collections.singleton(1)));
+      dettaglio.setDocumentazione(transformCheckNull(documenti, functionToBandoDocumentoDto));
       
       //comunicazioni + documenti
       List<Comunicazione> comunicazioniGara = comRepository.findAll(BandoSpecification.getComunicazioneSpecification(proceduraRiferimento,sa.getCodice()));
-      if(!comunicazioniGara.isEmpty()) {
+      if (!comunicazioniGara.isEmpty()) {
         TransformComunicazioneToComunicazioneDto functionComunicazione = new TransformComunicazioneToComunicazioneDto(new TransformComunicazioneDocumentoToComunicazioneDocumentoDto());
-        dettaglio.setComunicazioni(comunicazioniGara.stream().filter(Objects::nonNull).map(functionComunicazione::apply).collect(Collectors.toList()));
+        dettaglio.setComunicazioni(transformCheckNull(comunicazioniGara, functionComunicazione));
       }
       return Optional.of(dettaglio);
     }

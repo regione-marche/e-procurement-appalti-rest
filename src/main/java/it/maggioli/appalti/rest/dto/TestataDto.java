@@ -98,7 +98,7 @@ public abstract class TestataDto {
     this.stato = stato;
   }
 
-  @ApiModelProperty(value = "Data ultima modifica")
+  @ApiModelProperty(value = "Data ultima modifica",example = "2020-05-11 00:00:00")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   @JsonProperty("dataUltimaModifica")
   public Date getDataUltimaModifica() {

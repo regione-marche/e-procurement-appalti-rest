@@ -11,8 +11,8 @@ import it.maggioli.appalti.rest.repositories.WgenChiaviRepository;
 
 @Component
 public class WgenChiaviManager {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-  private final long DEFAULT_INCREMENT = 1;
+  private static final Logger logger = LoggerFactory.getLogger(WgenChiaviManager.class);
+  private static final long DEFAULT_INCREMENT = 1;
   @Autowired
   private WgenChiaviRepository wgcRepository;
   

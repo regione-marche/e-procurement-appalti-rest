@@ -1,6 +1,7 @@
 package it.maggioli.appalti.rest.configuration.scheduler;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import it.maggioli.appalti.rest.configuration.response.ConfigurationResponse;
@@ -18,7 +20,7 @@ import it.maggioli.appalti.rest.manager.ConfigurationManager;
 @Component
 @RefreshScope
 public class ConfigurationScheduler {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private static final Logger logger = LoggerFactory.getLogger(ConfigurationScheduler.class);
   
   @Value("${url.configuration.ms}")
   private String url;
@@ -29,7 +31,7 @@ public class ConfigurationScheduler {
   @Scheduled(cron = "0 */5 * * * *")
   public void schedule() {
     try {
-      logger.debug("Try to fetch data from {}",url);
+      logger.trace("Try to fetch data from {}",url);
       RestTemplate restTemplate = new RestTemplate();
 //      restTemplate.exchange(RequestEntity.post(new URI(this.url+"/PA")).build(), Re);
       ResponseEntity<ConfigurationResponse[]> resp = restTemplate.getForEntity(new URI(this.url+"/PA"), ConfigurationResponse[].class);
@@ -41,8 +43,12 @@ public class ConfigurationScheduler {
       } else {
         logger.warn("No data available");
       }
+    } catch (URISyntaxException e) {
+      logger.trace("url {} is not an URI",url);
+    } catch (RestClientException e) {
+      logger.trace("Error invoking {}",url);
     } catch (Exception e) {
-      logger.error("Error during retrieving configurations",e);
+      logger.trace("Error during retrieving configurations",e);
     }
   }
 }

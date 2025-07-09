@@ -243,16 +243,8 @@ public class GareLotti {
     return ricmano;
   }
   
-  public void setRicMano(String ricmano) {
-    this.ricmano = ricmano;
-  }
-  
   public Integer getModmano() {
     return modmano;
-  }
-  
-  public void setModMano(Integer modmano) {
-    this.modmano = modmano;
   }
   
   public Integer getTipologia() {

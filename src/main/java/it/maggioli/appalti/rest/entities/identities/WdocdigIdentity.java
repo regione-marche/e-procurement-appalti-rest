@@ -1,9 +1,9 @@
 package it.maggioli.appalti.rest.entities.identities;
 
+
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 
 /**
  * Classe che rappresenta la chiave della tabella <code>w_docdig</code>
@@ -13,15 +13,13 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class WdocdigIdentity implements Serializable {
   private static final long serialVersionUID = 1L;
-  @NotNull
   private String idprg;
-  @NotNull
   private Long iddocdig;
   
   public WdocdigIdentity() {
   }
   
-  public WdocdigIdentity(@NotNull String idprg, @NotNull Long iddocdig) {
+  public WdocdigIdentity(String idprg, Long iddocdig) {
     this.idprg = idprg;
     this.iddocdig = iddocdig;
   }

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
@@ -16,24 +17,14 @@ import org.springframework.web.context.request.WebRequest;
 @Component
 public class ErrorAttributesHandler extends DefaultErrorAttributes {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
+  private static final Logger logger = LoggerFactory.getLogger(ErrorAttributesHandler.class);
 
   @Override
-  public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
-    Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, false);
-    // javax.servlet.error.status_code
-    // System.out.println("STATUS: "+webRequest.getAttribute("javax.servlet.error.status_code", 0));
-    // Throwable error = (Throwable) webRequest.getAttribute("javax.servlet.error.exception", 0);
-    // if(error != null) {
-    // System.out.println("ERROR: "+error);
-    // if(error.getCause()!=null && error.getCause().getClass().getSimpleName().equals("InvalidTokenException")) {
-    // System.out.println("ERROR: "+error.getCause());
-    // errorAttributes.put("status", HttpStatus.UNAUTHORIZED.value());
-    // }
-    // }
+  public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+    Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
     errorAttributes.remove("error");
     errorAttributes.remove("path");
-    logger.debug("{}",errorAttributes);
+    logger.debug("{}", errorAttributes);
     return errorAttributes;
   }
 }

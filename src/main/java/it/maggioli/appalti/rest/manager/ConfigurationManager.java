@@ -17,8 +17,9 @@ import it.maggioli.appalti.rest.configuration.response.ConfigurationResponse;
  *
  */
 @Service
+@SuppressWarnings("java:S3749")
 public class ConfigurationManager {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private static final Logger logger = LoggerFactory.getLogger(ConfigurationManager.class);
   
   public static final String GARE_DOCINVITOPUBBLICA_VIS = "PA.GARE.DOCINVITOPUBBLICA.VIS";
   public static final String GARE_ATTIDOCART29_VIS = "PA.GARE.ATTIDOCART29.VIS";
@@ -29,29 +30,29 @@ public class ConfigurationManager {
   
   @PostConstruct
   public void postConstruct() {
-    logger.info("Configuration Manager deployed.");
     /*
      *  GARE ATTIDOCART29
         GARE ADERENTI
         GARE DOCINVITOPUBBLICA
      */
-    properties = new ConcurrentHashMap<String, ConfigurationResponse>();
-    defaultProperties = new ConcurrentHashMap<String, ConfigurationResponse>();
+    properties = new ConcurrentHashMap<>();
+    defaultProperties = new ConcurrentHashMap<>();
     ConfigurationResponse resp = new ConfigurationResponse();
     resp.setCodapp("PA");
     resp.setChiave("GARE.ATTIDOCART29.VIS");
     resp.setValore("true");
-    defaultProperties.put("PA.GARE.ATTIDOCART29.VIS", resp);
+    defaultProperties.put(GARE_ATTIDOCART29_VIS, resp);
     resp = new ConfigurationResponse();
     resp.setCodapp("PA");
     resp.setChiave("GARE.ADERENTI.VIS");
     resp.setValore("false");
-    defaultProperties.put("PA.GARE.ADERENTI.VIS", resp);
+    defaultProperties.put(GARE_ADERENTI_VIS, resp);
     resp = new ConfigurationResponse();
     resp.setCodapp("PA");
     resp.setChiave("GARE.DOCINVITOPUBBLICA.VIS");
     resp.setValore("false");
-    defaultProperties.put("PA.GARE.DOCINVITOPUBBLICA.VIS", resp);
+    defaultProperties.put(GARE_DOCINVITOPUBBLICA_VIS, resp);
+    logger.info("Configuration Manager deployed.");
   }
   
   public void addProperty(ConfigurationResponse resp) {

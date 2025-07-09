@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/error")
 public class JsonErrorController extends AbstractErrorController {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
+  private static final Logger logger = LoggerFactory.getLogger(JsonErrorController.class);
   
   public JsonErrorController(ErrorAttributes errorAttributes) {
     super(errorAttributes);
@@ -26,15 +27,10 @@ public class JsonErrorController extends AbstractErrorController {
 
   @GetMapping
   public ResponseEntity<Map<String, Object>> error(final HttpServletRequest request) {
-      final Map<String, Object> body = this.getErrorAttributes(request, false);
+      final Map<String, Object> body = this.getErrorAttributes(request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.MESSAGE));
       final HttpStatus status = this.getStatus(request);
       logger.trace("{}",status);
       return new ResponseEntity<>(body, status);
   }
   
-  @Override
-  public String getErrorPath() {
-    return "/error";
-  }
-
 }

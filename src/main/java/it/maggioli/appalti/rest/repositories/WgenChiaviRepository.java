@@ -32,6 +32,6 @@ public interface WgenChiaviRepository extends JpaRepository<WgenChiavi, String> 
   @Transactional(propagation = Propagation.MANDATORY)
   @Modifying
   @Query(value = "UPDATE WgenChiavi w SET w.chiave = w.chiave + :incremento WHERE UPPER(w.tabella) = UPPER(:tabella)")
-  public void incrementChiavePerTabella(@Param(value = "incremento") long incremento,String tabella);
+  public void incrementChiavePerTabella(@Param(value = "incremento") long incremento,@Param(value = "tabella") String tabella);
 
 }

@@ -1,5 +1,6 @@
 package it.maggioli.appalti.rest.functions;
 
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,12 @@ public class TransformTraspContrattoPartecipanteToTraspContrattoPartecipanteDto
     implements Function<TraspContrattoPartecipante, TraspContrattoPartecipanteDto> {
 
   private final TransformTraspContrattoPartecipanteRtiToTraspContrattoPartecipanteDto functionPartecipanti;
+  private final Set<String> codimpItaliane;
   
   public TransformTraspContrattoPartecipanteToTraspContrattoPartecipanteDto(
-      TransformTraspContrattoPartecipanteRtiToTraspContrattoPartecipanteDto functionPartecipanti) {
+      TransformTraspContrattoPartecipanteRtiToTraspContrattoPartecipanteDto functionPartecipanti,Set<String> codimpItaliane) {
     this.functionPartecipanti = functionPartecipanti;
+    this.codimpItaliane = codimpItaliane;
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
@@ -26,6 +29,7 @@ public class TransformTraspContrattoPartecipanteToTraspContrattoPartecipanteDto
   public TraspContrattoPartecipanteDto apply(TraspContrattoPartecipante t) {
     TraspContrattoPartecipanteDto dto = new TraspContrattoPartecipanteDto();
     BeanUtils.copyProperties(t, dto,"listaRti");
+    dto.setItaliana(codimpItaliane.contains(t.getDitta()));
     if(t.getRti()) {
       dto.setListaRti(t.getListaRti().stream().map(functionPartecipanti::apply).collect(Collectors.toList()));
     }

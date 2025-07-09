@@ -67,7 +67,6 @@ public class StazioneAppaltante implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((codfiscale == null) ? 0 : codfiscale.hashCode());
     result = prime * result + ((codice == null) ? 0 : codice.hashCode());
     return result;
   }
@@ -78,13 +77,12 @@ public class StazioneAppaltante implements Serializable {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     StazioneAppaltante other = (StazioneAppaltante) obj;
-    if (codfiscale == null) {
-      if (other.codfiscale != null) return false;
-    } else if (!codfiscale.equals(other.codfiscale)) return false;
     if (codice == null) {
       if (other.codice != null) return false;
     } else if (!codice.equals(other.codice)) return false;
     return true;
   }
+
+  
   
 }

@@ -16,6 +16,7 @@ public class TraspContrattoPartecipanteRti {
   private String codfisc;
   private String partiva;
   private Boolean mandataria;
+  private String codimp;
   
   public String getCodimprti() {
     return codimprti;
@@ -55,6 +56,22 @@ public class TraspContrattoPartecipanteRti {
   
   public void setMandataria(Boolean mandataria) {
     this.mandataria = mandataria;
+  }
+
+  
+  /**
+   * @return the codimp
+   */
+  public String getCodimp() {
+    return codimp;
+  }
+
+  
+  /**
+   * @param codimp the codimp to set
+   */
+  public void setCodimp(String codimp) {
+    this.codimp = codimp;
   }
 
   @Override

@@ -139,7 +139,7 @@ public class AdempimentoAnticorruzioneDto {
   /**
    * @return the dataPubblicazione
    */
-  @ApiModelProperty(name = "dataPubblicazione",value="data di pubblicazione")
+  @ApiModelProperty(name = "dataPubblicazione",value="data di pubblicazione", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDataPubblicazione() {
     return dataPubblicazione;
@@ -157,7 +157,7 @@ public class AdempimentoAnticorruzioneDto {
   /**
    * @return the dataAggiornamento
    */
-  @ApiModelProperty(name = "dataAggiornamento",value="data di aggiornamento, ultima pubblicazione")
+  @ApiModelProperty(name = "dataAggiornamento",value="data di aggiornamento, ultima pubblicazione", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDataAggiornamento() {
     return dataAggiornamento;
@@ -175,7 +175,7 @@ public class AdempimentoAnticorruzioneDto {
   /**
    * @return the dataApprovazione
    */
-  @ApiModelProperty(name = "dataApprovazione",value="data di approvazione dei dati oggetto di pubblicazione")
+  @ApiModelProperty(name = "dataApprovazione",value="data di approvazione dei dati oggetto di pubblicazione", example = "2020-05-11 00:00:00")
   @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = EUROPE_TIMEZONE)
   public Date getDataApprovazione() {
     return dataApprovazione;

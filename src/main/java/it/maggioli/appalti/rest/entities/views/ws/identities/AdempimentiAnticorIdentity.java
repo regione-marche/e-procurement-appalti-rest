@@ -54,5 +54,29 @@ public class AdempimentiAnticorIdentity implements Serializable {
         + (annorif != null ? "annorif=" + annorif : "")
         + "]";
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((annorif == null) ? 0 : annorif.hashCode());
+    result = prime * result + ((codein == null) ? 0 : codein.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    AdempimentiAnticorIdentity other = (AdempimentiAnticorIdentity) obj;
+    if (annorif == null) {
+      if (other.annorif != null) return false;
+    } else if (!annorif.equals(other.annorif)) return false;
+    if (codein == null) {
+      if (other.codein != null) return false;
+    } else if (!codein.equals(other.codein)) return false;
+    return true;
+  }
   
 }

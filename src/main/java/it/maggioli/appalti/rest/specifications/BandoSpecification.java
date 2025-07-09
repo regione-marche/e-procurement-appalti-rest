@@ -149,7 +149,7 @@ public class BandoSpecification {
           p.getExpressions().add(cb.like(cb.upper(root.get("oggetto")), "%" +oggetto.toUpperCase()+"%"));
         }
         if(tipoAppalto!=null) {
-          p.getExpressions().add(cb.equal(root.get("tipoAppalto"), tipoAppalto));
+          p.getExpressions().add(cb.equal(root.get("idTipoAppalto"), tipoAppalto));
         }
         if(dataPubblicazioneDa!=null) {
           p.getExpressions().add(cb.greaterThanOrEqualTo(root.get("dataPubblicazione"), dataPubblicazioneDa));
@@ -164,7 +164,7 @@ public class BandoSpecification {
           p.getExpressions().add(cb.lessThanOrEqualTo(root.get("dataTermine"), dataScadenzaA));
         }
         if(proceduraTelematica!=null) {
-          p.getExpressions().add(cb.equal(root.get("proceduraTelematica"), proceduraTelematica.booleanValue()));
+          p.getExpressions().add(cb.equal(root.get("proceduraTelematica"), proceduraTelematica  .booleanValue()));
         }
         if(stato!=null) {
           p.getExpressions().add(cb.equal(root.get("codstatogara"), stato));
@@ -175,6 +175,7 @@ public class BandoSpecification {
         if(sommaUrgenza!=null) {
           p.getExpressions().add(cb.equal(root.get("sommaUrgenza"), sommaUrgenza.booleanValue()));
         }
+       
         if(dataUltimaModificaA!=null && dataUltimaModificaDA!=null) {
           p.getExpressions().add(cb.between(root.get("dataUltimaModifica"), dataUltimaModificaDA, dataUltimaModificaA));
         } else if(dataUltimaModificaA!=null) {

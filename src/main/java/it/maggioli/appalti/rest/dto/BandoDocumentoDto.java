@@ -2,7 +2,10 @@ package it.maggioli.appalti.rest.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Data Transfer Object per {@link it.maggioli.appalti.rest.entities.views.ws.BandoDocumento BandoDocumento}
@@ -49,6 +52,8 @@ public class BandoDocumentoDto {
     this.url = url;
   }
   
+  @ApiModelProperty(example = "2020-05-11 00:00:00")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   public Date getDataPubblicazione() {
     return dataPubblicazione;
   }

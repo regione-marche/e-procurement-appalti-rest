@@ -31,13 +31,15 @@ public interface TraspContrattoRepository extends JpaRepository<TraspContratto, 
   @Transactional(readOnly = true)
   @Query(value = "SELECT count(tc.codice) as nelem,tc.codice FROM TraspContratto tc WHERE tc.singolaaggiudicataria = 1 GROUP BY tc.codice HAVING count(tc.codice)>1")
   public Stream<ITraspContrattoCountGroupByCodice> getTraspContrattoCountGreaterThanOneGroupByCodice();
-  
+
   /**
    * Ricerca se il contratto è ad aggiudicataria multipla
+   * {@code @Query("select} (count(t) > 0) from TraspContratto t where t.codice = ?1 and t.singolaaggiudicataria = ?2")
    * @param codice - il codice del contratto da verificare
-   * @return <code>true</code> se è ad aggiudicataria multipla, <code>false</code> altrimenti 
+   * @return <code>true</code> se è ad aggiudicataria multipla, <code>false</code> altrimenti
    */
   @Transactional(readOnly = true)
-  @Query(value = "SELECT count(tc.codice) > 1 as nelem FROM TraspContratto tc WHERE tc.singolaaggiudicataria = 1 AND tc.codice = :codice")
-  public Boolean isMultiplaAggiudicataria(@Param("codice") String codice);
+  boolean existsByCodiceAndSingolaaggiudicataria(String codice, Integer singolaaggiudicataria);
+
+
 }

@@ -72,7 +72,7 @@ public class AvvisoSpecification {
           p.getExpressions().add(cb.lessThanOrEqualTo(root.get("dataorascadenza"), dataScadenzaA));
         }
         if(altriSoggetti!=null) {
-          p.getExpressions().add(cb.equal(root.get("altriSoggetti"), altriSoggetti));
+          p.getExpressions().add(cb.equal(root.get("altrisog"), altriSoggetti));
         }
         
         if(dataUltimaModificaA!=null && dataUltimaModificaDA!=null) {
